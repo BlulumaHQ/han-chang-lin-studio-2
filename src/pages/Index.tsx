@@ -84,8 +84,7 @@ export default function HomePage() {
             {selectedWorks.slice(5, 11).map((work, i) => (
               <div
                 key={work.id}
-                className={`reveal reveal-delay-${(i % 3) + 1}`}
-                style={{ marginTop: i % 2 === 1 ? (window.innerWidth >= 768 ? "6rem" : 0) : 0 }}
+                className={`reveal reveal-delay-${(i % 3) + 1} ${i % 2 === 1 ? "md:mt-24" : ""}`}
               >
                 <div className="overflow-hidden">
                   <img
