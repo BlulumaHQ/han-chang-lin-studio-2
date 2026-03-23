@@ -30,32 +30,181 @@ export default function GalleryPage() {
 
   const selected = selectedIndex !== null ? filtered[selectedIndex] : null;
 
+  // Build editorial layout blocks
+  const blocks: JSX.Element[] = [];
+  let i = 0;
+  while (i < filtered.length) {
+    const pattern = blocks.length % 4;
+
+    if (pattern === 0 && filtered[i]) {
+      // Full-width cinematic piece
+      const idx = i;
+      const work = filtered[idx];
+      blocks.push(
+        <div key={work.id} className="reveal">
+          <button
+            onClick={() => setSelectedIndex(idx)}
+            className="w-full text-left group"
+          >
+            <div className="overflow-hidden">
+              <img
+                src={work.image}
+                alt={`${work.title} abstract painting by John Han-Chang Lin`}
+                className="w-full h-[40vh] md:h-[70vh] object-cover artwork-hover"
+                loading="lazy"
+              />
+            </div>
+            <div className="mt-4 px-6 md:px-16 lg:px-24 flex justify-between items-baseline">
+              <p className="font-serif text-sm font-light text-foreground tracking-wide">{work.title}</p>
+              <p className="text-[9px] text-muted-foreground/30 tracking-widest">{work.year} · {work.medium}</p>
+            </div>
+          </button>
+        </div>
+      );
+      i += 1;
+    } else if (pattern === 1) {
+      // Two-column: large left + smaller right with offset
+      const items = filtered.slice(i, i + 2);
+      if (items.length === 0) break;
+      blocks.push(
+        <div key={`pair-${i}`} className="px-6 md:px-16 lg:px-24">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
+            {items[0] && (
+              <button
+                onClick={() => setSelectedIndex(i)}
+                className="md:col-span-7 text-left group reveal"
+              >
+                <div className="overflow-hidden">
+                  <img
+                    src={items[0].image}
+                    alt={`${items[0].title} abstract painting by John Han-Chang Lin`}
+                    className="w-full aspect-[5/4] object-cover artwork-hover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="mt-3">
+                  <p className="font-serif text-sm font-light text-foreground tracking-wide">{items[0].title}</p>
+                  <p className="text-[9px] text-muted-foreground/30 tracking-widest mt-0.5">{items[0].year}</p>
+                </div>
+              </button>
+            )}
+            {items[1] && (
+              <button
+                onClick={() => setSelectedIndex(i + 1)}
+                className="md:col-span-5 md:mt-16 text-left group reveal reveal-delay-2"
+              >
+                <div className="overflow-hidden">
+                  <img
+                    src={items[1].image}
+                    alt={`${items[1].title} abstract painting by John Han-Chang Lin`}
+                    className="w-full aspect-[3/4] object-cover artwork-hover"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="mt-3">
+                  <p className="font-serif text-sm font-light text-foreground tracking-wide">{items[1].title}</p>
+                  <p className="text-[9px] text-muted-foreground/30 tracking-widest mt-0.5">{items[1].year}</p>
+                </div>
+              </button>
+            )}
+          </div>
+        </div>
+      );
+      i += items.length;
+    } else if (pattern === 2) {
+      // Three-column row
+      const items = filtered.slice(i, i + 3);
+      if (items.length === 0) break;
+      blocks.push(
+        <div key={`trio-${i}`} className="px-6 md:px-16 lg:px-24">
+          <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {items.map((item, j) => {
+              const absIdx = i + j;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setSelectedIndex(absIdx)}
+                  className={`text-left group reveal reveal-delay-${j + 1}`}
+                >
+                  <div className="overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={`${item.title} abstract painting by John Han-Chang Lin`}
+                      className="w-full aspect-[4/5] object-cover artwork-hover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="mt-3">
+                    <p className="font-serif text-xs font-light text-foreground tracking-wide">{item.title}</p>
+                    <p className="text-[9px] text-muted-foreground/30 tracking-widest mt-0.5">{item.year}</p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+      i += items.length;
+    } else if (pattern === 3) {
+      // Centered single — editorial pause
+      const work = filtered[i];
+      if (!work) break;
+      blocks.push(
+        <div key={`center-${i}`} className="px-6 md:px-16 lg:px-24">
+          <button
+            onClick={() => setSelectedIndex(i)}
+            className="w-full md:w-3/5 lg:w-1/2 mx-auto text-left group reveal"
+          >
+            <div className="overflow-hidden">
+              <img
+                src={work.image}
+                alt={`${work.title} abstract painting by John Han-Chang Lin`}
+                className="w-full aspect-[4/3] object-cover artwork-hover"
+                loading="lazy"
+              />
+            </div>
+            <div className="mt-3 text-center">
+              <p className="font-serif text-sm font-light text-foreground tracking-wide">{work.title}</p>
+              <p className="text-[9px] text-muted-foreground/30 tracking-widest mt-0.5">{work.year} · {work.medium}</p>
+            </div>
+          </button>
+        </div>
+      );
+      i += 1;
+    }
+  }
+
   return (
     <main className="pt-20">
-      {/* Header */}
-      <section className="px-6 md:px-16 lg:px-24 pt-16 pb-8 md:pt-24 md:pb-12">
+      {/* Header — editorial, left-aligned title with right-aligned count */}
+      <section className="px-6 md:px-16 lg:px-24 pt-20 md:pt-32 pb-12 md:pb-16">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
-            <div>
-              <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-[0.1em]" style={{ lineHeight: "1.1" }}>
+          <div className="grid grid-cols-1 md:grid-cols-12 items-end gap-4 reveal">
+            <div className="md:col-span-6">
+              <h1
+                className="font-serif text-4xl md:text-5xl lg:text-6xl font-light text-foreground tracking-[0.06em]"
+                style={{ lineHeight: "1.05" }}
+              >
                 Gallery
               </h1>
-              <p className="text-[10px] text-muted-foreground/40 mt-3 tracking-[0.25em] uppercase font-sans">
+            </div>
+            <div className="md:col-span-6 md:text-right">
+              <p className="text-[10px] text-muted-foreground/30 tracking-[0.3em] uppercase font-sans">
                 {filtered.length} works · Mixed Media on Canvas
               </p>
             </div>
           </div>
 
-          {/* Filter Chips — left-aligned, inline */}
-          <div className="flex flex-wrap gap-2 mt-12 reveal reveal-delay-1">
+          {/* Filters */}
+          <div className="flex flex-wrap gap-2 mt-14 reveal reveal-delay-1">
             {filters.map((f) => (
               <button
                 key={f.value}
-                onClick={() => setActive(f.value)}
+                onClick={() => { setActive(f.value); setSelectedIndex(null); }}
                 className={`px-4 py-1.5 text-[10px] tracking-[0.18em] font-sans uppercase border transition-all duration-500 ${
                   active === f.value
                     ? "bg-foreground text-background border-foreground"
-                    : "bg-transparent text-muted-foreground/40 border-border/40 hover:border-foreground/50 hover:text-foreground"
+                    : "bg-transparent text-muted-foreground/35 border-border/30 hover:border-foreground/40 hover:text-foreground"
                 }`}
               >
                 {f.label}
@@ -65,139 +214,9 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Gallery grid — varied rhythm */}
-      <section className="px-6 md:px-16 lg:px-24 py-12 md:py-16 pb-24 md:pb-36">
-        <div className="max-w-7xl mx-auto space-y-8 md:space-y-12">
-          {filtered.map((artwork, i) => {
-            const pattern = i % 7;
-
-            // Full-width hero piece
-            if (pattern === 0) {
-              return (
-                <button
-                  key={artwork.id}
-                  onClick={() => setSelectedIndex(i)}
-                  className="w-full text-left group reveal"
-                >
-                  <div className="overflow-hidden">
-                    <img
-                      src={artwork.image}
-                      alt={`${artwork.title} abstract painting by John Han-Chang Lin`}
-                      className="w-full h-[40vh] md:h-[65vh] object-cover artwork-hover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="mt-3 flex justify-between items-baseline">
-                    <p className="font-serif text-sm font-light text-foreground tracking-wide">{artwork.title}</p>
-                    <p className="text-[10px] text-muted-foreground/35 tracking-widest">{artwork.year} · {artwork.medium}</p>
-                  </div>
-                </button>
-              );
-            }
-
-            // Three-column row
-            if (pattern >= 1 && pattern <= 3) {
-              if (pattern !== 1) return null;
-              const items = [filtered[i], filtered[i + 1], filtered[i + 2]].filter(Boolean);
-              return (
-                <div key={artwork.id} className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                  {items.map((item, j) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setSelectedIndex(filtered.indexOf(item))}
-                      className={`text-left group reveal reveal-delay-${j + 1}`}
-                    >
-                      <div className="overflow-hidden">
-                        <img
-                          src={item.image}
-                          alt={`${item.title} abstract painting by John Han-Chang Lin`}
-                          className="w-full aspect-[3/4] object-cover artwork-hover"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="mt-3">
-                        <p className="font-serif text-xs md:text-sm font-light text-foreground tracking-wide">{item.title}</p>
-                        <p className="text-[10px] text-muted-foreground/35 tracking-widest mt-0.5">{item.year}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              );
-            }
-
-            // Two-column asymmetric (wide left)
-            if (pattern === 4 || pattern === 5) {
-              if (pattern === 5) return null;
-              const next = filtered[i + 1];
-              return (
-                <div key={artwork.id} className="grid grid-cols-1 md:grid-cols-7 gap-4 md:gap-6">
-                  <button
-                    onClick={() => setSelectedIndex(i)}
-                    className="md:col-span-4 text-left group reveal"
-                  >
-                    <div className="overflow-hidden">
-                      <img
-                        src={artwork.image}
-                        alt={`${artwork.title} abstract painting by John Han-Chang Lin`}
-                        className="w-full aspect-[5/4] object-cover artwork-hover"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="mt-3">
-                      <p className="font-serif text-sm font-light text-foreground tracking-wide">{artwork.title}</p>
-                      <p className="text-[10px] text-muted-foreground/35 tracking-widest mt-0.5">{artwork.year}</p>
-                    </div>
-                  </button>
-                  {next && (
-                    <button
-                      onClick={() => setSelectedIndex(i + 1)}
-                      className="md:col-span-3 text-left group reveal reveal-delay-2"
-                    >
-                      <div className="overflow-hidden">
-                        <img
-                          src={next.image}
-                          alt={`${next.title} abstract painting by John Han-Chang Lin`}
-                          className="w-full aspect-[3/4] object-cover artwork-hover"
-                          loading="lazy"
-                        />
-                      </div>
-                      <div className="mt-3">
-                        <p className="font-serif text-sm font-light text-foreground tracking-wide">{next.title}</p>
-                        <p className="text-[10px] text-muted-foreground/35 tracking-widest mt-0.5">{next.year}</p>
-                      </div>
-                    </button>
-                  )}
-                </div>
-              );
-            }
-
-            // Single centered
-            if (pattern === 6) {
-              return (
-                <button
-                  key={artwork.id}
-                  onClick={() => setSelectedIndex(i)}
-                  className="w-full md:w-3/5 mx-auto text-left group reveal"
-                >
-                  <div className="overflow-hidden">
-                    <img
-                      src={artwork.image}
-                      alt={`${artwork.title} abstract painting by John Han-Chang Lin`}
-                      className="w-full aspect-[4/3] object-cover artwork-hover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="mt-3 text-center">
-                    <p className="font-serif text-sm font-light text-foreground tracking-wide">{artwork.title}</p>
-                    <p className="text-[10px] text-muted-foreground/35 tracking-widest mt-0.5">{artwork.year} · {artwork.medium}</p>
-                  </div>
-                </button>
-              );
-            }
-
-            return null;
-          })}
-        </div>
+      {/* Editorial layout */}
+      <section className="space-y-12 md:space-y-20 pb-28 md:pb-44">
+        {blocks}
       </section>
 
       <ArtworkModal

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 import type { Artwork } from "@/data/artworks";
 
 interface HeroSliderProps {
@@ -18,80 +17,98 @@ export default function HeroSlider({ heroArtworks }: HeroSliderProps) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % heroArtworks.length);
-    }, 8000);
+    }, 7000);
     return () => clearInterval(interval);
   }, [heroArtworks.length]);
 
   if (heroArtworks.length === 0) return null;
 
   return (
-    <section className="relative h-screen w-full grid grid-cols-1 md:grid-cols-2 overflow-hidden">
-      {/* Left: Text panel */}
-      <div className="relative z-10 flex flex-col justify-end md:justify-center px-6 md:px-16 lg:px-24 pb-32 md:pb-0 order-2 md:order-1 bg-background">
+    <section className="relative h-screen w-full overflow-hidden">
+      {/* Full-bleed artwork */}
+      {heroArtworks.map((artwork, i) => (
         <div
-          className={`space-y-6 transition-all duration-1000 ease-out ${
-            ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-          }`}
+          key={artwork.id}
+          className="absolute inset-0"
+          style={{
+            opacity: current === i ? 1 : 0,
+            transition: "opacity 1800ms ease-in-out",
+          }}
         >
-          <p className="text-[10px] text-muted-foreground/40 tracking-[0.4em] uppercase font-sans">
-            Taiwanese-Canadian Abstract Painter
-          </p>
-          <h1
-            className="font-serif text-4xl md:text-5xl lg:text-7xl font-light text-foreground tracking-wide"
-            style={{ lineHeight: "1.05" }}
+          <img
+            src={artwork.image}
+            alt={`${artwork.title} abstract painting by John Han-Chang Lin`}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              transform: current === i ? "scale(1.04)" : "scale(1)",
+              transition: "transform 12000ms cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+          />
+        </div>
+      ))}
+
+      {/* Bottom-left: artist name — large, overlapping the artwork */}
+      <div className="absolute inset-0 flex flex-col justify-end pointer-events-none">
+        <div className="px-6 md:px-16 lg:px-24 pb-16 md:pb-24">
+          <div
+            className={`transition-all ease-out pointer-events-auto ${
+              ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+            style={{ transitionDuration: "1200ms", transitionDelay: "400ms" }}
           >
-            John<br />Han-Chang<br />Lin
-          </h1>
-          <p className="font-serif text-base md:text-lg text-muted-foreground/60 italic tracking-wider">
-            林漢章
-          </p>
-          <p className="text-sm text-muted-foreground/70 leading-[1.9] max-w-sm tracking-wide pt-2">
-            Color as Meditation · Flow as Expression
-          </p>
-          <div className="pt-4">
-            <Button variant="museum" size="lg" asChild>
-              <Link to="/gallery">View Gallery</Link>
-            </Button>
+            <p
+              className="font-sans text-[10px] tracking-[0.5em] uppercase mb-4"
+              style={{ color: "rgba(255,255,255,0.5)" }}
+            >
+              Taiwanese-Canadian Abstract Painter
+            </p>
+            <h1
+              className="font-serif text-5xl md:text-7xl lg:text-[6.5rem] font-light text-white tracking-wide"
+              style={{
+                lineHeight: "0.92",
+                mixBlendMode: "difference",
+              }}
+            >
+              John
+              <br />
+              Han-Chang
+              <br />
+              Lin
+            </h1>
+            <p
+              className="font-serif text-lg md:text-xl mt-4 italic tracking-wider"
+              style={{ color: "rgba(255,255,255,0.45)" }}
+            >
+              林漢章
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Right: Artwork panel — cycling images */}
-      <div className="relative overflow-hidden order-1 md:order-2 h-[50vh] md:h-full">
-        {heroArtworks.map((artwork, i) => (
-          <div
-            key={artwork.id}
-            className="absolute inset-0 transition-opacity ease-in-out"
-            style={{
-              opacity: current === i ? 1 : 0,
-              transitionDuration: "2000ms",
-            }}
-          >
-            <img
-              src={artwork.image}
-              alt={`${artwork.title} abstract painting by John Han-Chang Lin`}
-              className="absolute inset-0 w-full h-full object-cover"
-              style={{
-                transform: current === i ? "scale(1.03)" : "scale(1)",
-                transition: "transform 10000ms ease-out",
-              }}
-            />
-          </div>
-        ))}
-
-        {/* Slide indicators — bottom of image */}
-        <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10 flex gap-2.5">
+      {/* Right side: subtle scroll cue + slide indicators */}
+      <div className="absolute bottom-16 md:bottom-24 right-6 md:right-16 lg:right-24 flex flex-col items-end gap-6 pointer-events-auto">
+        <div className="flex flex-col gap-2">
           {heroArtworks.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`h-px transition-all duration-700 ${
-                current === i ? "bg-white w-8" : "bg-white/30 w-4"
-              }`}
+              className="transition-all duration-700"
+              style={{
+                width: "2px",
+                height: current === i ? "32px" : "16px",
+                backgroundColor: current === i ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.25)",
+              }}
               aria-label={`Slide ${i + 1}`}
             />
           ))}
         </div>
+        <Link
+          to="/gallery"
+          className="font-sans text-[9px] tracking-[0.35em] uppercase text-white/50 hover:text-white transition-colors duration-500"
+          style={{ writingMode: "vertical-rl" }}
+        >
+          View Gallery
+        </Link>
       </div>
     </section>
   );

@@ -1,4 +1,6 @@
+import { useMemo } from "react";
 import { useReveal } from "@/hooks/useReveal";
+import { getRandomHomeArtworks } from "@/data/artworks";
 
 const selectedExhibitions = [
   { year: "2024", title: "Solo Exhibition — Empty Wall Gallery", location: "Vancouver, BC" },
@@ -20,66 +22,106 @@ const community = [
 
 export default function ExhibitionsPage() {
   useReveal();
+  const { selectedWorks } = useMemo(() => getRandomHomeArtworks(), []);
 
   return (
     <main className="pt-20">
-      {/* Page header */}
-      <section className="px-6 md:px-16 lg:px-24 pt-16 md:pt-24 pb-20 md:pb-28 bg-secondary">
-        <div className="max-w-4xl reveal">
-          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-[0.1em]" style={{ lineHeight: "1.1" }}>
-            Exhibitions
-          </h1>
-          <p className="text-xs text-muted-foreground/40 tracking-[0.2em] uppercase mt-4 font-sans">
-            Selected exhibitions and community participation
-          </p>
+      {/* Hero — full-bleed artwork as header */}
+      {selectedWorks[0] && (
+        <div className="relative h-[40vh] md:h-[55vh] overflow-hidden reveal">
+          <img
+            src={selectedWorks[0].image}
+            alt="Exhibition artwork"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 flex items-end px-6 md:px-16 lg:px-24 pb-10 md:pb-16">
+            <div>
+              <h1
+                className="font-serif text-4xl md:text-5xl lg:text-6xl font-light text-white tracking-wide"
+                style={{ lineHeight: "1", mixBlendMode: "difference" }}
+              >
+                Exhibitions
+              </h1>
+              <p
+                className="text-[10px] tracking-[0.3em] uppercase mt-3 font-sans"
+                style={{ color: "rgba(255,255,255,0.4)" }}
+              >
+                Selected exhibitions and community participation
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Selected Exhibitions — timeline style */}
+      <section className="px-6 md:px-16 lg:px-24 py-28 md:py-40">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-sans text-[10px] tracking-[0.4em] uppercase text-muted-foreground/30 mb-16 reveal">
+            Selected Exhibitions
+          </h2>
+          <div className="space-y-0">
+            {selectedExhibitions.map((e, i) => (
+              <div
+                key={i}
+                className={`grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-border/20 reveal reveal-delay-${Math.min(i + 1, 3)}`}
+              >
+                <span className="md:col-span-2 text-[10px] text-muted-foreground/20 font-sans tracking-[0.3em]">{e.year}</span>
+                <p className="md:col-span-7 font-serif text-base md:text-lg font-light text-foreground tracking-wide leading-relaxed">{e.title}</p>
+                <p className="md:col-span-3 text-[10px] text-muted-foreground/30 tracking-wider md:text-right">{e.location}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Content — three-column on desktop */}
-      <section className="px-6 md:px-16 lg:px-24 py-24 md:py-36">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-20 md:gap-16">
-          {/* Selected Exhibitions */}
-          <div className="reveal">
-            <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-muted-foreground/40 mb-10 pb-3 border-b border-border/40">
-              Selected Exhibitions
-            </h2>
-            <div className="space-y-0">
-              {selectedExhibitions.map((e, i) => (
-                <div key={i} className="py-5 border-b border-border/20">
-                  <span className="text-[10px] text-muted-foreground/25 font-sans tracking-[0.3em] block mb-2">{e.year}</span>
-                  <p className="font-serif text-sm font-light text-foreground tracking-wide leading-relaxed">{e.title}</p>
-                  <p className="text-[10px] text-muted-foreground/35 tracking-wider mt-1">{e.location}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+      {/* Divider artwork */}
+      {selectedWorks[1] && (
+        <div className="reveal">
+          <img
+            src={selectedWorks[1].image}
+            alt="Artwork"
+            className="w-full h-[30vh] md:h-[45vh] object-cover"
+            loading="lazy"
+          />
+        </div>
+      )}
 
-          {/* Group Exhibitions */}
-          <div className="reveal reveal-delay-1">
-            <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-muted-foreground/40 mb-10 pb-3 border-b border-border/40">
-              Group Exhibitions
-            </h2>
-            <div className="space-y-0">
-              {groupExhibitions.map((e, i) => (
-                <div key={i} className="py-5 border-b border-border/20">
-                  <span className="text-[10px] text-muted-foreground/25 font-sans tracking-[0.3em] block mb-2">{e.year}</span>
-                  <p className="font-serif text-sm font-light text-foreground tracking-wide leading-relaxed">{e.title}</p>
-                  <p className="text-[10px] text-muted-foreground/35 tracking-wider mt-1">{e.location}</p>
-                </div>
-              ))}
-            </div>
+      {/* Group Exhibitions */}
+      <section className="px-6 md:px-16 lg:px-24 py-28 md:py-40">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-sans text-[10px] tracking-[0.4em] uppercase text-muted-foreground/30 mb-16 reveal">
+            Group Exhibitions
+          </h2>
+          <div className="space-y-0">
+            {groupExhibitions.map((e, i) => (
+              <div
+                key={i}
+                className={`grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-border/20 reveal reveal-delay-${Math.min(i + 1, 3)}`}
+              >
+                <span className="md:col-span-2 text-[10px] text-muted-foreground/20 font-sans tracking-[0.3em]">{e.year}</span>
+                <p className="md:col-span-7 font-serif text-base md:text-lg font-light text-foreground tracking-wide leading-relaxed">{e.title}</p>
+                <p className="md:col-span-3 text-[10px] text-muted-foreground/30 tracking-wider md:text-right">{e.location}</p>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
 
-          {/* Community */}
-          <div className="reveal reveal-delay-2">
-            <h2 className="font-sans text-[10px] tracking-[0.3em] uppercase text-muted-foreground/40 mb-10 pb-3 border-b border-border/40">
+      {/* Community */}
+      <section className="bg-secondary">
+        <div className="px-6 md:px-16 lg:px-24 py-24 md:py-36">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="font-sans text-[10px] tracking-[0.4em] uppercase text-muted-foreground/30 mb-16 reveal">
               Community Participation
             </h2>
             <div className="space-y-0">
               {community.map((e, i) => (
-                <div key={i} className="py-5 border-b border-border/20">
-                  <span className="text-[10px] text-muted-foreground/25 font-sans tracking-[0.3em] block mb-2">{e.year}</span>
-                  <p className="font-serif text-sm font-light text-foreground tracking-wide leading-relaxed">{e.title}</p>
+                <div
+                  key={i}
+                  className={`grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-border/15 reveal reveal-delay-${Math.min(i + 1, 3)}`}
+                >
+                  <span className="md:col-span-2 text-[10px] text-muted-foreground/20 font-sans tracking-[0.3em]">{e.year}</span>
+                  <p className="md:col-span-10 font-serif text-base md:text-lg font-light text-foreground tracking-wide leading-relaxed">{e.title}</p>
                 </div>
               ))}
             </div>
