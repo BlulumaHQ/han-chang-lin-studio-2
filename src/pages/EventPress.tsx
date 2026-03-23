@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useReveal } from "@/hooks/useReveal";
 
 import ep001 from "@/assets/event-press-001.webp";
 import ep002 from "@/assets/event-press-002.webp";
@@ -36,6 +37,7 @@ function shuffle<T>(arr: T[]): T[] {
 export default function EventPress() {
   const shuffled = useMemo(() => shuffle(photos), []);
   const [lightbox, setLightbox] = useState<number | null>(null);
+  useReveal();
 
   const prev = useCallback(() => {
     setLightbox((i) => (i !== null ? (i - 1 + shuffled.length) % shuffled.length : null));
@@ -57,28 +59,103 @@ export default function EventPress() {
   }, [lightbox, prev, next]);
 
   return (
-    <main className="pt-20">
-      <section className="px-6 md:px-16 py-12 md:py-20">
+    <main className="pt-24">
+      <section className="px-8 md:px-20 py-16 md:py-24">
         <div className="max-w-7xl mx-auto">
-          <h1 className="font-serif text-3xl md:text-5xl font-light text-foreground mb-12 text-center">
+          <h1 className="font-serif text-2xl md:text-4xl font-light text-foreground mb-16 text-center tracking-[0.15em] reveal">
             Event &amp; Press
           </h1>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {shuffled.map((src, i) => (
-              <button
-                key={i}
-                onClick={() => setLightbox(i)}
-                className="overflow-hidden cursor-pointer group"
-              >
-                <img
-                  src={src}
-                  alt=""
-                  className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-              </button>
-            ))}
+          {/* Editorial masonry-style layout */}
+          <div className="space-y-10 md:space-y-16">
+            {shuffled.map((src, i) => {
+              const pattern = i % 5;
+
+              if (pattern === 0) {
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setLightbox(i)}
+                    className="w-full overflow-hidden cursor-pointer group reveal"
+                  >
+                    <img
+                      src={src}
+                      alt=""
+                      className="w-full max-h-[65vh] object-cover artwork-hover"
+                      loading="lazy"
+                    />
+                  </button>
+                );
+              }
+
+              if (pattern === 1 || pattern === 2) {
+                if (pattern === 2) return null;
+                const nextSrc = shuffled[i + 1];
+                return (
+                  <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <button
+                      onClick={() => setLightbox(i)}
+                      className="overflow-hidden cursor-pointer group reveal"
+                    >
+                      <img
+                        src={src}
+                        alt=""
+                        className="w-full h-72 md:h-96 object-cover artwork-hover"
+                        loading="lazy"
+                      />
+                    </button>
+                    {nextSrc && (
+                      <button
+                        onClick={() => setLightbox(i + 1)}
+                        className="overflow-hidden cursor-pointer group reveal reveal-delay-2"
+                      >
+                        <img
+                          src={nextSrc}
+                          alt=""
+                          className="w-full h-72 md:h-96 object-cover artwork-hover"
+                          loading="lazy"
+                        />
+                      </button>
+                    )}
+                  </div>
+                );
+              }
+
+              if (pattern === 3 || pattern === 4) {
+                if (pattern === 4) return null;
+                const nextSrc = shuffled[i + 1];
+                return (
+                  <div key={i} className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6">
+                    <button
+                      onClick={() => setLightbox(i)}
+                      className="md:col-span-2 overflow-hidden cursor-pointer group reveal"
+                    >
+                      <img
+                        src={src}
+                        alt=""
+                        className="w-full h-72 md:h-[28rem] object-cover artwork-hover"
+                        loading="lazy"
+                      />
+                    </button>
+                    {nextSrc && (
+                      <button
+                        onClick={() => setLightbox(i + 1)}
+                        className="md:col-span-3 overflow-hidden cursor-pointer group reveal reveal-delay-2"
+                      >
+                        <img
+                          src={nextSrc}
+                          alt=""
+                          className="w-full h-72 md:h-[28rem] object-cover artwork-hover"
+                          loading="lazy"
+                        />
+                      </button>
+                    )}
+                  </div>
+                );
+              }
+
+              return null;
+            })}
           </div>
         </div>
       </section>
@@ -90,27 +167,27 @@ export default function EventPress() {
           onClick={() => setLightbox(null)}
         >
           <button
-            className="absolute top-4 right-4 text-white/80 hover:text-white z-10"
+            className="absolute top-6 right-6 text-white/60 hover:text-white z-10 transition-colors duration-300"
             onClick={() => setLightbox(null)}
             aria-label="Close"
           >
-            <X size={28} />
+            <X size={24} />
           </button>
 
           <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-10"
+            className="absolute left-6 top-1/2 -translate-y-1/2 text-white/40 hover:text-white z-10 transition-colors duration-300"
             onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous"
           >
-            <ChevronLeft size={36} />
+            <ChevronLeft size={32} />
           </button>
 
           <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white z-10"
+            className="absolute right-6 top-1/2 -translate-y-1/2 text-white/40 hover:text-white z-10 transition-colors duration-300"
             onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next"
           >
-            <ChevronRight size={36} />
+            <ChevronRight size={32} />
           </button>
 
           <img
