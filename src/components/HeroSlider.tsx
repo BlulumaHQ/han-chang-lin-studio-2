@@ -59,50 +59,51 @@ export default function HeroSlider({ heroArtworks }: HeroSliderProps) {
       {slides.map((slide, i) => (
         <div
           key={i}
-          className="absolute inset-0 transition-opacity duration-[2000ms] ease-in-out"
+          className="absolute inset-0 transition-opacity duration-[2500ms] ease-in-out"
           style={{ opacity: current === i ? 1 : 0 }}
         >
           <img
             src={slide.image}
             alt={slide.alt}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-[9000ms] ease-out"
-            style={{ transform: current === i && zoom ? "scale(1.05)" : "scale(1)" }}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-[12000ms] ease-out"
+            style={{ transform: current === i && zoom ? "scale(1.04)" : "scale(1)" }}
           />
         </div>
       ))}
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+      {/* Minimal vignette — no heavy gradient */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
-      {/* Text — lower-left */}
+      {/* Text — bottom-left, minimal and elegant */}
       {slides.map((slide, i) => (
         <div
           key={i}
-          className="absolute inset-0 z-10 flex flex-col justify-end pb-16 md:pb-24 px-6 md:px-16 transition-opacity duration-[1500ms] ease-in-out"
+          className="absolute inset-0 z-10 flex flex-col justify-end pb-20 md:pb-28 px-8 md:px-20 transition-opacity duration-[2000ms] ease-in-out"
           style={{ opacity: current === i ? 1 : 0, pointerEvents: current === i ? "auto" : "none" }}
         >
-          <div className="max-w-2xl">
+          <div className="max-w-xl">
             {slide.lines.map((line, j) => (
               <p
                 key={j}
                 className={
                   j === 0
-                    ? "font-serif text-4xl md:text-6xl lg:text-7xl font-light text-primary-foreground leading-tight"
-                    : "font-serif text-lg md:text-xl text-primary-foreground/80 mt-2 font-light italic"
+                    ? "font-serif text-3xl md:text-5xl lg:text-6xl font-light text-primary-foreground leading-[1.1] tracking-wide"
+                    : "font-serif text-base md:text-lg text-primary-foreground/70 mt-2 font-light tracking-wider"
                 }
+                style={{ lineHeight: j === 0 ? "1.1" : undefined }}
               >
                 {line}
               </p>
             ))}
-            <div className="mt-3">
+            <div className="mt-4 opacity-50">
               {slide.chinese.map((line, j) => (
-                <span key={j} className="font-serif text-base md:text-lg text-primary-foreground/60">
+                <span key={j} className="font-serif text-sm md:text-base text-primary-foreground">
                   {line}{j < slide.chinese.length - 1 ? " · " : ""}
                 </span>
               ))}
             </div>
             {slide.cta && (
-              <div className="mt-8">
+              <div className="mt-10">
                 <Button variant="museum-light" size="lg" asChild>
                   <Link to={slide.cta.to}>{slide.cta.label}</Link>
                 </Button>
@@ -112,14 +113,14 @@ export default function HeroSlider({ heroArtworks }: HeroSliderProps) {
         </div>
       ))}
 
-      {/* Slide indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+      {/* Minimal slide indicators — bottom right */}
+      <div className="absolute bottom-8 right-8 md:right-20 z-20 flex gap-3">
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
-            className={`w-8 h-0.5 transition-all duration-500 ${
-              current === i ? "bg-primary-foreground" : "bg-primary-foreground/30"
+            className={`w-6 h-px transition-all duration-700 ${
+              current === i ? "bg-primary-foreground w-10" : "bg-primary-foreground/30"
             }`}
             aria-label={`Slide ${i + 1}`}
           />
