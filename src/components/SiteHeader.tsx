@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
@@ -13,29 +13,39 @@ const navItems = [
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === "/";
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md transition-colors duration-500">
-      <div className="flex items-center justify-between px-8 md:px-20 py-5">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "bg-background/90 backdrop-blur-lg shadow-[0_1px_0_hsl(var(--border))]" : "bg-transparent"
+      }`}
+    >
+      <div className="flex items-center justify-between px-6 md:px-16 lg:px-24 h-16 md:h-20">
         <Link
           to="/"
-          className="font-serif text-lg md:text-xl font-light tracking-[0.15em] text-foreground transition-colors duration-300"
+          className="font-serif text-base md:text-lg font-light tracking-[0.18em] text-foreground hover:opacity-60 transition-opacity duration-500"
         >
           John Han-Chang Lin
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-10">
+        {/* Desktop nav — right-aligned, spaced */}
+        <nav className="hidden md:flex items-center gap-8 lg:gap-12">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              className={`font-sans text-[10px] tracking-[0.25em] uppercase transition-colors duration-500 ${
+              className={`relative font-sans text-[10px] tracking-[0.22em] uppercase transition-colors duration-500 after:absolute after:bottom-[-2px] after:left-0 after:h-px after:bg-foreground after:transition-all after:duration-500 ${
                 location.pathname === item.path
-                  ? "text-foreground"
-                  : "text-muted-foreground/70 hover:text-foreground"
+                  ? "text-foreground after:w-full"
+                  : "text-muted-foreground hover:text-foreground after:w-0 hover:after:w-full"
               }`}
             >
               {item.label}
@@ -49,30 +59,31 @@ export default function SiteHeader() {
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
-      {/* Mobile nav */}
+      {/* Mobile nav — fullscreen overlay */}
       {open && (
-        <nav className="md:hidden bg-background/95 backdrop-blur-md border-t border-border/50 animate-fade-in">
-          <div className="flex flex-col px-8 py-8 gap-6">
-            {navItems.map((item) => (
+        <div className="md:hidden fixed inset-0 top-16 bg-background/98 backdrop-blur-xl animate-fade-in z-40">
+          <nav className="flex flex-col items-center justify-center h-full gap-10 -mt-16">
+            {navItems.map((item, i) => (
               <Link
                 key={item.path}
                 to={item.path}
                 onClick={() => setOpen(false)}
-                className={`font-sans text-xs tracking-[0.25em] uppercase ${
+                className={`font-serif text-2xl font-light tracking-[0.15em] transition-colors duration-300 ${
                   location.pathname === item.path
                     ? "text-foreground"
-                    : "text-muted-foreground/70"
+                    : "text-muted-foreground"
                 }`}
+                style={{ animationDelay: `${i * 60}ms` }}
               >
                 {item.label}
               </Link>
             ))}
-          </div>
-        </nav>
+          </nav>
+        </div>
       )}
     </header>
   );

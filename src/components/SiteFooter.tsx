@@ -2,40 +2,64 @@ import { Link } from "react-router-dom";
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-border/50 bg-background">
-      <div className="max-w-7xl mx-auto px-8 md:px-20 py-16 md:py-24">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div>
-            <p className="font-serif text-lg font-light text-foreground tracking-wide">John Han-Chang Lin</p>
-            <p className="font-serif text-base text-muted-foreground/60 mt-1">林漢章</p>
-            <p className="text-xs text-muted-foreground/50 mt-4 tracking-wider">Vancouver, Canada</p>
+    <footer className="bg-background">
+      {/* Thin rule */}
+      <div className="mx-6 md:mx-16 lg:mx-24 border-t border-border/40" />
+
+      <div className="px-6 md:px-16 lg:px-24 py-20 md:py-28">
+        {/* Two-row footer: name + links on top, legal on bottom */}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-16">
+          {/* Left: branding */}
+          <div className="space-y-3">
+            <p className="font-serif text-xl font-light text-foreground tracking-[0.1em]">John Han-Chang Lin</p>
+            <p className="font-serif text-sm text-muted-foreground/50">林漢章</p>
+            <p className="text-[10px] text-muted-foreground/40 tracking-[0.2em] mt-4">Vancouver, Canada</p>
           </div>
-          <div className="flex flex-col gap-3">
-            <Link to="/gallery" className="text-xs tracking-[0.2em] uppercase text-muted-foreground/50 hover:text-foreground transition-colors duration-500">Gallery</Link>
-            <Link to="/about" className="text-xs tracking-[0.2em] uppercase text-muted-foreground/50 hover:text-foreground transition-colors duration-500">About</Link>
-            <Link to="/exhibitions" className="text-xs tracking-[0.2em] uppercase text-muted-foreground/50 hover:text-foreground transition-colors duration-500">Exhibitions</Link>
-            <Link to="/contact" className="text-xs tracking-[0.2em] uppercase text-muted-foreground/50 hover:text-foreground transition-colors duration-500">Contact</Link>
+
+          {/* Center: nav links in a single row */}
+          <div className="flex flex-wrap gap-x-10 gap-y-3">
+            {[
+              { label: "Gallery", to: "/gallery" },
+              { label: "About", to: "/about" },
+              { label: "Exhibitions", to: "/exhibitions" },
+              { label: "Contact", to: "/contact" },
+            ].map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="text-[10px] tracking-[0.22em] uppercase text-muted-foreground/50 hover:text-foreground transition-colors duration-500"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
-          <div>
-            <p className="text-xs text-muted-foreground/50 leading-relaxed tracking-wide">
+
+          {/* Right: inquiry CTA */}
+          <div className="max-w-xs">
+            <p className="text-xs text-muted-foreground/40 leading-relaxed tracking-wide">
               For acquisition inquiries and exhibition opportunities.
             </p>
-            <Link to="/contact" className="text-xs text-foreground tracking-[0.15em] uppercase mt-3 inline-block hover:opacity-60 transition-opacity duration-500">
+            <Link
+              to="/contact"
+              className="inline-block mt-4 text-[10px] text-foreground tracking-[0.22em] uppercase border-b border-foreground/30 pb-0.5 hover:border-foreground transition-colors duration-500"
+            >
               Contact the Studio
             </Link>
           </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-border/30 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-          <p className="text-[10px] text-muted-foreground/40 tracking-wider">
+
+        {/* Bottom bar */}
+        <div className="mt-20 pt-6 border-t border-border/20 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+          <p className="text-[10px] text-muted-foreground/30 tracking-wider">
             © 2026 John Han-Chang Lin Gallery. All rights reserved.
           </p>
-          <p className="text-[10px] text-muted-foreground/40 tracking-wider">
+          <p className="text-[10px] text-muted-foreground/30 tracking-wider">
             Web Design by{" "}
             <a
               href="https://bluluma.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-foreground/40 hover:text-foreground transition-colors duration-500"
+              className="text-muted-foreground/50 hover:text-foreground transition-colors duration-500"
             >
               Bluluma
             </a>
