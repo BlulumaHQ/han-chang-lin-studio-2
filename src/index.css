@@ -42,28 +42,6 @@
     --museum-grey: 220 5% 50%;
     --museum-warm: 35 20% 94%;
   }
-
-  .dark {
-    --background: 220 10% 8%;
-    --foreground: 40 15% 90%;
-    --card: 220 10% 10%;
-    --card-foreground: 40 15% 90%;
-    --popover: 220 10% 8%;
-    --popover-foreground: 40 15% 90%;
-    --primary: 40 15% 90%;
-    --primary-foreground: 220 10% 8%;
-    --secondary: 220 8% 15%;
-    --secondary-foreground: 40 15% 90%;
-    --muted: 220 8% 15%;
-    --muted-foreground: 220 5% 60%;
-    --accent: 220 8% 15%;
-    --accent-foreground: 40 15% 90%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 220 8% 20%;
-    --input: 220 8% 20%;
-    --ring: 40 15% 90%;
-  }
 }
 
 @layer base {
@@ -85,14 +63,13 @@
 }
 
 @layer utilities {
-  /* Scroll-triggered reveal — elements start invisible and animate in via IntersectionObserver */
   .reveal {
     opacity: 0;
-    transform: translateY(18px);
-    filter: blur(4px);
-    transition: opacity 700ms cubic-bezier(0.16, 1, 0.3, 1),
-                transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
-                filter 700ms cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(14px);
+    filter: blur(3px);
+    transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 650ms cubic-bezier(0.16, 1, 0.3, 1),
+                filter 650ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .reveal.revealed {
     opacity: 1;
@@ -100,11 +77,39 @@
     filter: blur(0);
   }
 
-  .reveal-delay-1 { transition-delay: 80ms; }
-  .reveal-delay-2 { transition-delay: 160ms; }
-  .reveal-delay-3 { transition-delay: 240ms; }
-  .reveal-delay-4 { transition-delay: 320ms; }
-  .reveal-delay-5 { transition-delay: 400ms; }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-20px);
+    filter: blur(3px);
+    transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 650ms cubic-bezier(0.16, 1, 0.3, 1),
+                filter 650ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-left.revealed {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(20px);
+    filter: blur(3px);
+    transition: opacity 650ms cubic-bezier(0.16, 1, 0.3, 1),
+                transform 650ms cubic-bezier(0.16, 1, 0.3, 1),
+                filter 650ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-right.revealed {
+    opacity: 1;
+    transform: translateX(0);
+    filter: blur(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 100ms; }
+  .reveal-delay-2 { transition-delay: 200ms; }
+  .reveal-delay-3 { transition-delay: 300ms; }
+  .reveal-delay-4 { transition-delay: 400ms; }
+  .reveal-delay-5 { transition-delay: 500ms; }
 
   .animate-fade-in {
     animation: fadeIn 1s ease-out forwards;
@@ -126,7 +131,7 @@
   }
 
   .artwork-hover:hover {
-    transform: scale(1.025);
+    transform: scale(1.02);
   }
 }
 

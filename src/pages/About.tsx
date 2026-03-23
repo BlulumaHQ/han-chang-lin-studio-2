@@ -7,26 +7,34 @@ export default function AboutPage() {
   useReveal();
 
   return (
-    <main className="pt-24">
-      {/* Portrait + Biography — edge-to-edge feel */}
-      <section className="px-8 md:px-20 py-16 md:py-24">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
-          <div className="overflow-hidden reveal">
-            <img
-              src={photoPortrait}
-              alt="John Han-Chang Lin portrait"
-              className="w-full aspect-[3/4] object-cover"
-            />
+    <main className="pt-20">
+      {/* Opening — full-width quote over warm background */}
+      <section className="bg-secondary px-6 md:px-16 lg:px-24 py-24 md:py-36">
+        <div className="max-w-3xl reveal">
+          <p className="text-[10px] text-muted-foreground/40 tracking-[0.4em] uppercase font-sans mb-8">About the Artist</p>
+          <blockquote className="font-serif text-2xl md:text-4xl lg:text-5xl font-light italic text-foreground leading-[1.2] tracking-wide" style={{ lineHeight: "1.2" }}>
+            "I do not paint pictures. I create conditions for paintings to emerge."
+          </blockquote>
+          <div className="mt-8 text-xs text-muted-foreground/35 leading-relaxed space-y-1 tracking-wider reveal reveal-delay-1">
+            <p>「繪畫對我而言，是一種修行。」</p>
+            <p>林漢章透過色彩流動與自然力量，</p>
+            <p>讓畫面在畫布上逐漸生成。</p>
           </div>
-          <div className="space-y-8 md:pt-16 reveal reveal-delay-2">
-            <h1 className="font-serif text-2xl md:text-4xl font-light text-foreground tracking-[0.1em]" style={{ lineHeight: "1.15" }}>
+        </div>
+      </section>
+
+      {/* Portrait + Biography — image right, text left (reversed from before) */}
+      <section className="px-6 md:px-16 lg:px-24 py-24 md:py-36">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-20 items-start">
+          <div className="md:col-span-3 space-y-8 md:pr-8 reveal-left">
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-[0.08em]" style={{ lineHeight: "1.1" }}>
               John Han-Chang Lin
             </h1>
-            <p className="font-serif text-lg text-muted-foreground/50">林漢章</p>
-            <p className="text-[10px] text-muted-foreground/40 tracking-[0.3em] uppercase">
+            <p className="font-serif text-lg text-muted-foreground/45">林漢章</p>
+            <p className="text-[10px] text-muted-foreground/35 tracking-[0.3em] uppercase">
               Taiwanese-Canadian Abstract Painter
             </p>
-            <div className="space-y-5 text-sm text-muted-foreground leading-[2] pt-4 tracking-wide">
+            <div className="space-y-6 text-sm text-muted-foreground leading-[2] pt-4 tracking-wide">
               <p>
                 John Han-Chang Lin is a Taiwanese-Canadian artist based in Vancouver.
                 Since immigrating to Canada in 1990, he has developed a distinctive approach
@@ -58,56 +66,63 @@ export default function AboutPage() {
             </div>
 
             {/* Hsin Hsin logo */}
-            <div className="pt-8">
+            <div className="pt-6">
               <a
                 href="https://hsinhsin.ca/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block opacity-40 hover:opacity-80 transition-opacity duration-500"
+                className="inline-block opacity-30 hover:opacity-70 transition-opacity duration-500"
               >
                 <img
                   src={hsinLogo}
                   alt="Hsin Hsin"
-                  className="h-10 w-auto"
+                  className="h-9 w-auto"
                 />
               </a>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Philosophy — full bleed feel */}
-      <section className="py-0">
-        <div className="bg-secondary">
-          <div className="max-w-2xl mx-auto px-8 md:px-20 py-24 md:py-32 space-y-10 reveal">
-            <h2 className="font-serif text-xl md:text-2xl font-light text-foreground tracking-[0.1em]">
-              Artistic Philosophy
-            </h2>
-            <blockquote className="font-serif text-lg md:text-2xl font-light italic text-foreground leading-relaxed tracking-wide">
-              "I do not paint pictures. I create conditions for paintings to emerge."
-            </blockquote>
-            <p className="text-sm text-muted-foreground leading-[2] tracking-wide">
-              Lin allows pigments to flow freely across the canvas, guided by gravity and the
-              natural behavior of the materials. Each painting evolves organically through time,
-              creating compositions that evoke landscapes, natural forces, and emotional states.
-            </p>
-            <div className="text-xs text-muted-foreground/40 leading-relaxed space-y-1 pt-4 tracking-wider">
-              <p>「繪畫對我而言，是一種修行。」</p>
-              <p>林漢章透過色彩流動與自然力量，</p>
-              <p>讓畫面在畫布上逐漸生成。</p>
-            </div>
+          <div className="md:col-span-2 overflow-hidden reveal-right">
+            <img
+              src={photoPortrait}
+              alt="John Han-Chang Lin portrait"
+              className="w-full aspect-[3/4] object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* Creative Process */}
-      <section className="px-8 md:px-20 py-24 md:py-32">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-serif text-xl md:text-2xl font-light text-foreground mb-12 tracking-[0.1em] reveal">
-            Creative Process
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
-            <div className="space-y-5 text-sm text-muted-foreground leading-[2] tracking-wide reveal">
+      {/* Philosophy — full-width centered */}
+      <section className="py-0">
+        <div className="bg-secondary">
+          <div className="max-w-2xl mx-auto px-6 md:px-16 py-28 md:py-36 text-center space-y-10 reveal">
+            <h2 className="font-serif text-xl md:text-2xl font-light text-foreground tracking-[0.12em]">
+              Artistic Philosophy
+            </h2>
+            <p className="text-sm text-muted-foreground leading-[2.2] tracking-wide max-w-lg mx-auto">
+              Lin allows pigments to flow freely across the canvas, guided by gravity and the
+              natural behavior of the materials. Each painting evolves organically through time,
+              creating compositions that evoke landscapes, natural forces, and emotional states.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Creative Process — image left, text right (reversed from before) */}
+      <section className="px-6 md:px-16 lg:px-24 py-24 md:py-36">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+          <div className="overflow-hidden reveal-left">
+            <img
+              src={photoStudio}
+              alt="John Lin in studio"
+              className="w-full aspect-[4/5] object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div className="space-y-6 reveal-right">
+            <h2 className="font-serif text-xl md:text-2xl font-light text-foreground tracking-[0.1em]">
+              Creative Process
+            </h2>
+            <div className="space-y-5 text-sm text-muted-foreground leading-[2] tracking-wide">
               <p>
                 Lin begins by preparing the canvas surface and carefully mixing pigments
                 to precise consistencies.
@@ -120,14 +135,6 @@ export default function AboutPage() {
                 Layers interact over time, forming textures, depth, and translucency that
                 resemble erosion patterns, ocean currents, and atmospheric formations.
               </p>
-            </div>
-            <div className="overflow-hidden reveal reveal-delay-2">
-              <img
-                src={photoStudio}
-                alt="John Lin in studio"
-                className="w-full aspect-[3/4] object-cover"
-                loading="lazy"
-              />
             </div>
           </div>
         </div>

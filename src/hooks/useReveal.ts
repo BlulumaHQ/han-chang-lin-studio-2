@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
 /**
- * Observes all `.reveal` elements and adds `.revealed` when they enter viewport.
- * Call once in a layout/page wrapper.
+ * Observes `.reveal`, `.reveal-left`, `.reveal-right` elements
+ * and adds `.revealed` when they enter viewport.
  */
 export function useReveal() {
   useEffect(() => {
@@ -15,10 +15,10 @@ export function useReveal() {
           }
         });
       },
-      { threshold: 0.15 }
+      { threshold: 0.12 }
     );
 
-    const elements = document.querySelectorAll(".reveal");
+    const elements = document.querySelectorAll(".reveal, .reveal-left, .reveal-right");
     elements.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();

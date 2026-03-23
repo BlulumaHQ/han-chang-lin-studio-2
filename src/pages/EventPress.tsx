@@ -59,135 +59,67 @@ export default function EventPress() {
   }, [lightbox, prev, next]);
 
   return (
-    <main className="pt-24">
-      <section className="px-8 md:px-20 py-16 md:py-24">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="font-serif text-2xl md:text-4xl font-light text-foreground mb-16 text-center tracking-[0.15em] reveal">
+    <main className="pt-20">
+      {/* Header */}
+      <section className="px-6 md:px-16 lg:px-24 pt-16 md:pt-24 pb-16 md:pb-20 bg-secondary">
+        <div className="max-w-4xl reveal">
+          <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-light text-foreground tracking-[0.1em]" style={{ lineHeight: "1.1" }}>
             Event &amp; Press
           </h1>
+          <p className="text-xs text-muted-foreground/40 tracking-[0.2em] uppercase mt-4 font-sans">
+            Exhibitions, events, and media coverage
+          </p>
+        </div>
+      </section>
 
-          {/* Editorial masonry-style layout */}
-          <div className="space-y-10 md:space-y-16">
-            {shuffled.map((src, i) => {
-              const pattern = i % 5;
-
-              if (pattern === 0) {
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setLightbox(i)}
-                    className="w-full overflow-hidden cursor-pointer group reveal"
-                  >
-                    <img
-                      src={src}
-                      alt=""
-                      className="w-full max-h-[65vh] object-cover artwork-hover"
-                      loading="lazy"
-                    />
-                  </button>
-                );
-              }
-
-              if (pattern === 1 || pattern === 2) {
-                if (pattern === 2) return null;
-                const nextSrc = shuffled[i + 1];
-                return (
-                  <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    <button
-                      onClick={() => setLightbox(i)}
-                      className="overflow-hidden cursor-pointer group reveal"
-                    >
-                      <img
-                        src={src}
-                        alt=""
-                        className="w-full h-72 md:h-96 object-cover artwork-hover"
-                        loading="lazy"
-                      />
-                    </button>
-                    {nextSrc && (
-                      <button
-                        onClick={() => setLightbox(i + 1)}
-                        className="overflow-hidden cursor-pointer group reveal reveal-delay-2"
-                      >
-                        <img
-                          src={nextSrc}
-                          alt=""
-                          className="w-full h-72 md:h-96 object-cover artwork-hover"
-                          loading="lazy"
-                        />
-                      </button>
-                    )}
-                  </div>
-                );
-              }
-
-              if (pattern === 3 || pattern === 4) {
-                if (pattern === 4) return null;
-                const nextSrc = shuffled[i + 1];
-                return (
-                  <div key={i} className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-6">
-                    <button
-                      onClick={() => setLightbox(i)}
-                      className="md:col-span-2 overflow-hidden cursor-pointer group reveal"
-                    >
-                      <img
-                        src={src}
-                        alt=""
-                        className="w-full h-72 md:h-[28rem] object-cover artwork-hover"
-                        loading="lazy"
-                      />
-                    </button>
-                    {nextSrc && (
-                      <button
-                        onClick={() => setLightbox(i + 1)}
-                        className="md:col-span-3 overflow-hidden cursor-pointer group reveal reveal-delay-2"
-                      >
-                        <img
-                          src={nextSrc}
-                          alt=""
-                          className="w-full h-72 md:h-[28rem] object-cover artwork-hover"
-                          loading="lazy"
-                        />
-                      </button>
-                    )}
-                  </div>
-                );
-              }
-
-              return null;
-            })}
-          </div>
+      {/* Photo grid — dense masonry-inspired layout */}
+      <section className="px-6 md:px-16 lg:px-24 py-16 md:py-24 pb-24 md:pb-36">
+        <div className="max-w-7xl mx-auto columns-1 md:columns-2 lg:columns-3 gap-4 md:gap-5 space-y-4 md:space-y-5">
+          {shuffled.map((src, i) => (
+            <button
+              key={i}
+              onClick={() => setLightbox(i)}
+              className="w-full overflow-hidden cursor-pointer group reveal break-inside-avoid block"
+            >
+              <img
+                src={src}
+                alt=""
+                className="w-full object-cover artwork-hover"
+                loading="lazy"
+              />
+            </button>
+          ))}
         </div>
       </section>
 
       {/* Lightbox */}
       {lightbox !== null && (
         <div
-          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center"
+          className="fixed inset-0 z-[100] bg-black/92 flex items-center justify-center"
           onClick={() => setLightbox(null)}
         >
           <button
-            className="absolute top-6 right-6 text-white/60 hover:text-white z-10 transition-colors duration-300"
+            className="absolute top-6 right-6 text-white/50 hover:text-white z-10 transition-colors duration-300"
             onClick={() => setLightbox(null)}
             aria-label="Close"
           >
-            <X size={24} />
+            <X size={22} />
           </button>
 
           <button
-            className="absolute left-6 top-1/2 -translate-y-1/2 text-white/40 hover:text-white z-10 transition-colors duration-300"
+            className="absolute left-6 top-1/2 -translate-y-1/2 text-white/30 hover:text-white z-10 transition-colors duration-300"
             onClick={(e) => { e.stopPropagation(); prev(); }}
             aria-label="Previous"
           >
-            <ChevronLeft size={32} />
+            <ChevronLeft size={28} />
           </button>
 
           <button
-            className="absolute right-6 top-1/2 -translate-y-1/2 text-white/40 hover:text-white z-10 transition-colors duration-300"
+            className="absolute right-6 top-1/2 -translate-y-1/2 text-white/30 hover:text-white z-10 transition-colors duration-300"
             onClick={(e) => { e.stopPropagation(); next(); }}
             aria-label="Next"
           >
-            <ChevronRight size={32} />
+            <ChevronRight size={28} />
           </button>
 
           <img

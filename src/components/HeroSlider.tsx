@@ -3,128 +3,95 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import type { Artwork } from "@/data/artworks";
 
-interface Slide {
-  image: string;
-  alt: string;
-  lines: string[];
-  chinese: string[];
-  cta?: { label: string; to: string };
-}
-
-const slideText: Omit<Slide, "image" | "alt">[] = [
-  {
-    lines: ["John Han-Chang Lin", "Color as Meditation", "Flow as Expression"],
-    chinese: ["林漢章", "以色彩修行", "讓靈魂流動"],
-    cta: { label: "View Gallery", to: "/gallery" },
-  },
-  {
-    lines: ["Painting is a form of meditation."],
-    chinese: ["繪畫是一種修行"],
-  },
-  {
-    lines: ["Pigment, Gravity, Time"],
-    chinese: ["顏料、重力與時間"],
-    cta: { label: "Explore the Work", to: "/gallery" },
-  },
-];
-
 interface HeroSliderProps {
   heroArtworks: Artwork[];
 }
 
 export default function HeroSlider({ heroArtworks }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
-  const [zoom, setZoom] = useState(false);
-
-  const slides: Slide[] = heroArtworks.map((artwork, i) => ({
-    ...slideText[i],
-    image: artwork.image,
-    alt: `${artwork.title} abstract painting by John Han-Chang Lin`,
-  }));
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setZoom(false);
-    const zoomTimer = requestAnimationFrame(() => setZoom(true));
+    requestAnimationFrame(() => setReady(true));
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slides.length);
-    }, 9000);
-    return () => {
-      clearInterval(interval);
-      cancelAnimationFrame(zoomTimer);
-    };
-  }, [current, slides.length]);
+      setCurrent((prev) => (prev + 1) % heroArtworks.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [heroArtworks.length]);
+
+  if (heroArtworks.length === 0) return null;
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      {slides.map((slide, i) => (
+    <section className="relative h-screen w-full grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+      {/* Left: Text panel */}
+      <div className="relative z-10 flex flex-col justify-end md:justify-center px-6 md:px-16 lg:px-24 pb-32 md:pb-0 order-2 md:order-1 bg-background">
         <div
-          key={i}
-          className="absolute inset-0 transition-opacity duration-[2500ms] ease-in-out"
-          style={{ opacity: current === i ? 1 : 0 }}
+          className={`space-y-6 transition-all duration-1000 ease-out ${
+            ready ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
         >
-          <img
-            src={slide.image}
-            alt={slide.alt}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-[12000ms] ease-out"
-            style={{ transform: current === i && zoom ? "scale(1.04)" : "scale(1)" }}
-          />
-        </div>
-      ))}
-
-      {/* Minimal vignette — no heavy gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-
-      {/* Text — bottom-left, minimal and elegant */}
-      {slides.map((slide, i) => (
-        <div
-          key={i}
-          className="absolute inset-0 z-10 flex flex-col justify-end pb-20 md:pb-28 px-8 md:px-20 transition-opacity duration-[2000ms] ease-in-out"
-          style={{ opacity: current === i ? 1 : 0, pointerEvents: current === i ? "auto" : "none" }}
-        >
-          <div className="max-w-xl">
-            {slide.lines.map((line, j) => (
-              <p
-                key={j}
-                className={
-                  j === 0
-                    ? "font-serif text-3xl md:text-5xl lg:text-6xl font-light text-primary-foreground leading-[1.1] tracking-wide"
-                    : "font-serif text-base md:text-lg text-primary-foreground/70 mt-2 font-light tracking-wider"
-                }
-                style={{ lineHeight: j === 0 ? "1.1" : undefined }}
-              >
-                {line}
-              </p>
-            ))}
-            <div className="mt-4 opacity-50">
-              {slide.chinese.map((line, j) => (
-                <span key={j} className="font-serif text-sm md:text-base text-primary-foreground">
-                  {line}{j < slide.chinese.length - 1 ? " · " : ""}
-                </span>
-              ))}
-            </div>
-            {slide.cta && (
-              <div className="mt-10">
-                <Button variant="museum-light" size="lg" asChild>
-                  <Link to={slide.cta.to}>{slide.cta.label}</Link>
-                </Button>
-              </div>
-            )}
+          <p className="text-[10px] text-muted-foreground/40 tracking-[0.4em] uppercase font-sans">
+            Taiwanese-Canadian Abstract Painter
+          </p>
+          <h1
+            className="font-serif text-4xl md:text-5xl lg:text-7xl font-light text-foreground tracking-wide"
+            style={{ lineHeight: "1.05" }}
+          >
+            John<br />Han-Chang<br />Lin
+          </h1>
+          <p className="font-serif text-base md:text-lg text-muted-foreground/60 italic tracking-wider">
+            林漢章
+          </p>
+          <p className="text-sm text-muted-foreground/70 leading-[1.9] max-w-sm tracking-wide pt-2">
+            Color as Meditation · Flow as Expression
+          </p>
+          <div className="pt-4">
+            <Button variant="museum" size="lg" asChild>
+              <Link to="/gallery">View Gallery</Link>
+            </Button>
           </div>
         </div>
-      ))}
+      </div>
 
-      {/* Minimal slide indicators — bottom right */}
-      <div className="absolute bottom-8 right-8 md:right-20 z-20 flex gap-3">
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCurrent(i)}
-            className={`w-6 h-px transition-all duration-700 ${
-              current === i ? "bg-primary-foreground w-10" : "bg-primary-foreground/30"
-            }`}
-            aria-label={`Slide ${i + 1}`}
-          />
+      {/* Right: Artwork panel — cycling images */}
+      <div className="relative overflow-hidden order-1 md:order-2 h-[50vh] md:h-full">
+        {heroArtworks.map((artwork, i) => (
+          <div
+            key={artwork.id}
+            className="absolute inset-0 transition-opacity ease-in-out"
+            style={{
+              opacity: current === i ? 1 : 0,
+              transitionDuration: "2000ms",
+            }}
+          >
+            <img
+              src={artwork.image}
+              alt={`${artwork.title} abstract painting by John Han-Chang Lin`}
+              className="absolute inset-0 w-full h-full object-cover"
+              style={{
+                transform: current === i ? "scale(1.03)" : "scale(1)",
+                transition: "transform 10000ms ease-out",
+              }}
+            />
+          </div>
         ))}
+
+        {/* Slide indicators — bottom of image */}
+        <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 z-10 flex gap-2.5">
+          {heroArtworks.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(i)}
+              className={`h-px transition-all duration-700 ${
+                current === i ? "bg-white w-8" : "bg-white/30 w-4"
+              }`}
+              aria-label={`Slide ${i + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
