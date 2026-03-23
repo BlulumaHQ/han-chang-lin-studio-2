@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 20% 97%;
+    --foreground: 220 10% 20%;
+
+    --card: 40 15% 95%;
+    --card-foreground: 220 10% 20%;
+
+    --popover: 40 20% 97%;
+    --popover-foreground: 220 10% 20%;
+
+    --primary: 220 10% 25%;
+    --primary-foreground: 40 20% 97%;
+
+    --secondary: 35 15% 92%;
+    --secondary-foreground: 220 10% 25%;
+
+    --muted: 35 10% 93%;
+    --muted-foreground: 220 5% 50%;
+
+    --accent: 35 15% 90%;
+    --accent-foreground: 220 10% 20%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 35 10% 88%;
+    --input: 35 10% 88%;
+    --ring: 220 10% 25%;
+
+    --radius: 0.25rem;
+
+    --museum-ivory: 40 25% 96%;
+    --museum-stone: 35 10% 85%;
+    --museum-charcoal: 220 10% 20%;
+    --museum-grey: 220 5% 50%;
+    --museum-warm: 35 20% 94%;
+  }
+
+  .dark {
+    --background: 220 10% 8%;
+    --foreground: 40 15% 90%;
+    --card: 220 10% 10%;
+    --card-foreground: 40 15% 90%;
+    --popover: 220 10% 8%;
+    --popover-foreground: 40 15% 90%;
+    --primary: 40 15% 90%;
+    --primary-foreground: 220 10% 8%;
+    --secondary: 220 8% 15%;
+    --secondary-foreground: 40 15% 90%;
+    --muted: 220 8% 15%;
+    --muted-foreground: 220 5% 60%;
+    --accent: 220 8% 15%;
+    --accent-foreground: 40 15% 90%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 8% 20%;
+    --input: 220 8% 20%;
+    --ring: 40 15% 90%;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-slow {
+    animation: fadeIn 1.8s ease-out forwards;
+    opacity: 0;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+    opacity: 0;
+  }
+
+  .artwork-hover {
+    @apply transition-transform duration-700 ease-out;
+  }
+
+  .artwork-hover:hover {
+    transform: scale(1.03);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
